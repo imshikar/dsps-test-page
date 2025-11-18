@@ -10,7 +10,19 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+    <div id="login-form" class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+        <h1 class="text-2xl font-bold mb-4 text-center">請輸入通行碼</h1>
+        <div class="mb-4">
+            <label for="passcodeInput" class="block text-sm font-medium text-gray-700">通行碼:</label>
+            <input type="password" id="passcodeInput" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="輸入通行碼">
+        </div>
+        <button id="loginButton" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 w-full">
+            進入
+        </button>
+        <div id="loginError" class="text-red-500 text-center mt-3 hidden">通行碼錯誤，請重新輸入。</div>
+    </div>
+
+    <div id="app-content" class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md" style="display: none;">
         <h1 class="text-2xl font-bold mb-4 text-center">簡易留言板</h1>
 
         <div class="mb-4">

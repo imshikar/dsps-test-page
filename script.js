@@ -5,6 +5,51 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Login elements
+    const loginForm = document.getElementById('login-form');
+    const passcodeInput = document.getElementById('passcodeInput');
+    const loginButton = document.getElementById('loginButton');
+    const loginError = document.getElementById('loginError');
+    const appContent = document.getElementById('app-content');
+
+    // Removed hardcoded CORRECT_PASSCODE
+    // const CORRECT_PASSCODE = '12345'; 
+
+    loginButton.addEventListener('click', async () => { // Added async here
+        const enteredPasscode = passcodeInput.value;
+        
+        // Call Supabase Edge Function to verify passcode using Supabase JS library
+        try {
+            const { data, error } = await supabase.functions.invoke('verify-passcode', {
+                body: { passcode: enteredPasscode },
+            });
+
+            if (error) {
+                console.error('Error invoking Edge Function:', error);
+                loginError.textContent = '驗證失敗，請稍後再試。';
+                loginError.classList.remove('hidden');
+                return;
+            }
+
+            if (data.success) {
+                loginForm.style.display = 'none';
+                appContent.style.display = 'block';
+                loginError.classList.add('hidden'); // Hide error if previously shown
+                // Proceed with loading messages and setting up real-time
+                fetchMessages();
+                setupRealtime();
+            } else {
+                loginError.classList.remove('hidden'); // Show error message
+                passcodeInput.value = ''; // Clear passcode input
+            }
+        } catch (error) {
+            console.error('Error verifying passcode:', error);
+            loginError.textContent = '驗證失敗，請稍後再試。';
+            loginError.classList.remove('hidden');
+        }
+    });
+
+    // Guestbook elements
     const usernameInput = document.getElementById('usernameInput');
     const messageInput = document.getElementById('messageInput');
     const messageForm = document.getElementById('messageForm');
@@ -39,7 +84,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (error) {
             console.error('Error fetching messages:', error.message);
         } else {
+            // Clear existing messages before re-fetching to prevent duplicates on re-login
+            messagesContainer.innerHTML = '';
             data.forEach(displayMessage);
+            if (data.length === 0) {
+                messagesContainer.innerHTML = '<div class="text-gray-500 text-center py-4">目前沒有訊息，快來發送第一條吧！</div>';
+            }
         }
     }
 
@@ -87,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
         messageInput.value = '';
     });
 
-    // Initial setup
-    fetchMessages();
-    setupRealtime();
+    // Initial setup - only if no login is required, otherwise call after successful login
+    // fetchMessages();
+    // setupRealtime();
 });
