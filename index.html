@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>簡易留言板</title>
+    <!-- Tailwind CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+        <h1 class="text-2xl font-bold mb-4 text-center">簡易留言板</h1>
+
+        <div class="mb-4">
+            <label for="usernameInput" class="block text-sm font-medium text-gray-700">你的使用者名稱:</label>
+            <input type="text" id="usernameInput" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="輸入你的名稱" value="匿名使用者">
+        </div>
+
+        <div id="messagesContainer" class="h-80 overflow-y-auto border border-gray-300 rounded-md p-3 mb-4 bg-gray-50">
+            <!-- Messages will be loaded here -->
+            <div class="text-gray-500 text-center py-4">目前沒有訊息，快來發送第一條吧！</div>
+        </div>
+
+        <form id="messageForm" class="flex flex-col space-y-2">
+            <textarea id="messageInput" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 resize-none" rows="3" placeholder="輸入你的訊息..."></textarea>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                發送訊息
+            </button>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
